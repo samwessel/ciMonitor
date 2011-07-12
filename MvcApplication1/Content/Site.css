@@ -1,0 +1,20 @@
+﻿body
+{
+    font-size: 20pt;
+}
+
+li
+{
+    list-style: none;
+}
+
+li.success
+{
+    display: none;
+    background-color: Green;
+}
+
+li.fail
+{
+    background-color: Red;
+}
