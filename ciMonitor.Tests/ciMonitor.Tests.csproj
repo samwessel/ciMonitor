@@ -55,7 +55,7 @@
     <Compile Include="StatusFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MvcApplication1\ciMonitor.csproj">
+    <ProjectReference Include="..\ciMonitor\ciMonitor.csproj">
       <Project>{523393FA-6676-4F63-8B66-ACB7A44AC1A1}</Project>
       <Name>ciMonitor</Name>
     </ProjectReference>
