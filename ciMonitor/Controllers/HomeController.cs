@@ -1,35 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using ciMonitor.ViewModels;
+﻿using System.Web.Mvc;
 
 namespace ciMonitor.Controllers
 {
     [HandleError]
     public class HomeController : Controller
     {
-        private readonly JenkinsRssParser _jenkinsRssParser;
-        readonly string[] _serverUris = new[] { "http://buildsrvr01:8080", "http://build02:8080" };
+        private readonly IRssParser _rssParser;
 
         public HomeController()
+            : this(new JenkinsRssParser(new[] { "http://buildsrvr01:8080", "http://build02:8080" }))
         {
-            _jenkinsRssParser = new JenkinsRssParser();
         }
 
-        public ActionResult Index()
+        public HomeController(IRssParser rssParser)
         {
-            var results = LoadBuilds(_serverUris);
-
-            return View(results);
+            _rssParser = rssParser;
         }
 
-        private List<BuildOutcome> LoadBuilds(IEnumerable<string> feedUris)
+        public ViewResult Index()
         {
-            var results = new List<BuildOutcome>();
-            foreach (var uri in feedUris)
-            {
-                results.AddRange(_jenkinsRssParser.ParseJenkinsBuilds(uri));
-            }
-            return results;
+            return View(_rssParser.LoadBuilds());
         }
     }
 }

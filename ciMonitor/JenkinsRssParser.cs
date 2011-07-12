@@ -5,24 +5,33 @@ using ciMonitor.ViewModels;
 
 namespace ciMonitor
 {
-    public class JenkinsRssParser
+    public interface IRssParser
     {
+        IEnumerable<BuildOutcome> LoadBuilds();
+    }
+
+    public class JenkinsRssParser : IRssParser
+    {
+        private readonly string[] _serverUris;
         private readonly BuildOutcomeFactory _buildOutcomeFactory;
 
-        public JenkinsRssParser()
+        public JenkinsRssParser(string[] serverUris)
         {
+            _serverUris = serverUris;
             _buildOutcomeFactory = new BuildOutcomeFactory();
         }
 
-        public IEnumerable<BuildOutcome> ParseJenkinsBuilds(string serverUri)
+        public IEnumerable<BuildOutcome> LoadBuilds()
         {
             XNamespace rssNamespace = "http://www.w3.org/2005/Atom";
-            var feedXml = XDocument.Load(serverUri + "/rssLatest");
-
-            var jenkinsBuildTitles = feedXml.Descendants(rssNamespace + "entry").Select(
-                entry => entry.Element(rssNamespace + "title").Value);
-
-            return jenkinsBuildTitles.Select(jenkinsBuildTitle => _buildOutcomeFactory.CreateFrom(jenkinsBuildTitle)).ToList();
+            var result = new List<BuildOutcome>();
+            foreach (var serverUri in _serverUris)
+            {
+                result.AddRange(XDocument.Load(serverUri + "/rssLatest").Descendants(rssNamespace + "entry").Select(
+                    entry => entry.Element(rssNamespace + "title").Value).Select(
+                        jenkinsBuildTitle => _buildOutcomeFactory.CreateFrom(jenkinsBuildTitle)));
+            }
+            return result;
         }
     }
 }
