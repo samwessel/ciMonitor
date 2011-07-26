@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ciMonitor.ViewModels;
 
 namespace ciMonitor.Controllers
 {
@@ -19,7 +20,7 @@ namespace ciMonitor.Controllers
 
         public ViewResult Index()
         {
-            return View(_rssParser.LoadBuilds());
+            return View(new BuildOutcomesViewModel(_rssParser.LoadBuilds()));
         }
     }
 }

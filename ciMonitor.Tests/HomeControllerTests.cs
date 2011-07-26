@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using ciMonitor.Controllers;
 using ciMonitor.ViewModels;
@@ -31,9 +32,15 @@ namespace ciMonitor.Tests
         }
 
         [Test]
+        public void TheViewModelIsTheCorrectType()
+        {
+            Assert.That(_result.ViewData.Model, Is.TypeOf(typeof(BuildOutcomesViewModel)));
+        }
+
+        [Test]
         public void ItPassesTheBuildOutcomesToTheView()
         {
-            Assert.That(_result.ViewData.Model, Is.SameAs(_buildOutcomes));
+            Assert.That(((BuildOutcomesViewModel)_result.ViewData.Model).BuildOutcomes, Is.SameAs(_buildOutcomes));
         }
     }
 }

@@ -74,7 +74,8 @@
     <Compile Include="Status.cs" />
     <Compile Include="StatusFactory.cs" />
     <Compile Include="ViewModels\BuildOutcome.cs" />
-    <Compile Include="ViewModels\BuildOutcomeFactory.cs" />
+    <Compile Include="BuildOutcomeFactory.cs" />
+    <Compile Include="ViewModels\BuildOutcomesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

@@ -6,7 +6,7 @@
 
         public static Status Unknown()
         {
-            return new Status("uknown");
+            return new Status("unknown");
         }
 
         public static Status Success()
