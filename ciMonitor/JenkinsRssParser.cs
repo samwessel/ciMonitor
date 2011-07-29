@@ -24,14 +24,16 @@ namespace ciMonitor
         public IEnumerable<BuildOutcome> LoadBuilds()
         {
             XNamespace rssNamespace = "http://www.w3.org/2005/Atom";
-            var result = new List<BuildOutcome>();
+            var buildOutcomes = new List<BuildOutcome>();
             foreach (var serverUri in _serverUris)
             {
-                result.AddRange(XDocument.Load(serverUri + "/rssLatest").Descendants(rssNamespace + "entry").Select(
-                    entry => entry.Element(rssNamespace + "title").Value).Select(
-                        jenkinsBuildTitle => _buildOutcomeFactory.CreateFrom(jenkinsBuildTitle)));
+                var xDocument = XDocument.Load(serverUri + "/rssLatest");
+                var entryElements = xDocument.Descendants(rssNamespace + "entry");
+                var titleElements = entryElements.Select(entry => entry.Element(rssNamespace + "title").Value);
+                var serverBuildOutcomes = titleElements.Select(jenkinsBuildTitle => _buildOutcomeFactory.CreateFrom(jenkinsBuildTitle));
+                buildOutcomes.AddRange(serverBuildOutcomes);
             }
-            return result;
+            return buildOutcomes;
         }
     }
 }
