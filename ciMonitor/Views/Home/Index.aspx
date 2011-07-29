@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <div id="purpleBar">
+    <div id="header">
         <img src="http://www.esendex.co.uk/sites/all/themes/Esendex_v3/newheaderimages/esendex-logo.jpg" />
     </div>
     <div id="builds">
