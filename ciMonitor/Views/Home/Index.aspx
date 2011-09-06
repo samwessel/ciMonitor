@@ -3,8 +3,8 @@
 
 <head>
     <title>ciMonitor</title>
-    <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script> 
+    <link href="<%= Url.Content("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
+    <script src="<%= Url.Content("~/Scripts/jquery-1.4.1.min.js") %>" type="text/javascript"></script> 
 
     <script type="text/javascript">
         function refreshBuildStatuses() {
