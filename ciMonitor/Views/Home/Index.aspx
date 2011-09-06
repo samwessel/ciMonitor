@@ -9,7 +9,7 @@
     <script type="text/javascript">
         function refreshBuildStatuses() {
             $.ajax({
-                url: '/Home/Builds',
+                url: '<%= Url.Action("Builds", "Home") %>',
                 cache: false,
                 success: function (data) {
                     $('#builds').html(data);
