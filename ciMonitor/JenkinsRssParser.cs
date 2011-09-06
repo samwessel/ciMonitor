@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
@@ -30,17 +29,29 @@ namespace ciMonitor
 
         public IEnumerable<BuildOutcome> LoadBuilds()
         {
-            XNamespace rssNamespace = "http://www.w3.org/2005/Atom";
             var buildOutcomes = new List<BuildOutcome>();
             foreach (var serverUri in _serverUris)
             {
-                var xDocument = XDocument.Load(serverUri + "/rssLatest");
-                var entryElements = xDocument.Descendants(rssNamespace + "entry");
-                var titleElements = entryElements.Select(entry => entry.Element(rssNamespace + "title").Value);
-                var serverBuildOutcomes = titleElements.Select(jenkinsBuildTitle => _buildOutcomeFactory.CreateFrom(jenkinsBuildTitle));
-                buildOutcomes.AddRange(serverBuildOutcomes);
+                buildOutcomes.AddRange(GetServerBuildOutcomes(serverUri));
             }
+
+            var excludedBuilds = ConfigurationManager.AppSettings["ExcludedBuilds"].Split(',');
+
+            foreach (var excludedBuild in excludedBuilds)
+            {
+                buildOutcomes.RemoveAll(build => build.Name.StartsWith(excludedBuild));
+            }
+            
             return buildOutcomes;
+        }
+
+        private IEnumerable<BuildOutcome> GetServerBuildOutcomes(string serverUri)
+        {
+            XNamespace rssNamespace = "http://www.w3.org/2005/Atom";
+            var xDocument = XDocument.Load(serverUri + "/rssLatest");
+            var entryElements = xDocument.Descendants(rssNamespace + "entry");
+            var titleElements = entryElements.Select(entry => entry.Element(rssNamespace + "title").Value);
+            return titleElements.Select(jenkinsBuildTitle => _buildOutcomeFactory.CreateFrom(jenkinsBuildTitle));
         }
     }
 }
