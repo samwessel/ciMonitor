@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
 using ciMonitor.ViewModels;
@@ -14,6 +16,11 @@ namespace ciMonitor
     {
         private readonly string[] _serverUris;
         private readonly BuildOutcomeFactory _buildOutcomeFactory;
+
+        public JenkinsRssParser()
+            : this(ConfigurationManager.AppSettings["ServerUris"].Split(','))
+        {
+        }
 
         public JenkinsRssParser(string[] serverUris)
         {

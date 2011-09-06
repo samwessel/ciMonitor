@@ -10,7 +10,7 @@ namespace ciMonitor.Controllers
         private readonly IRssParser _rssParser;
 
         public HomeController()
-            : this(new JenkinsRssParser(new[] { "http://buildsrvr01:8080", "http://build02:8080", "http://awsbuild01.esendex.com:8080/" }))
+            : this(new JenkinsRssParser())
         {
         }
 
