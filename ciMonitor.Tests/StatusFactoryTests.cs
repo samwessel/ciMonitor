@@ -20,6 +20,12 @@ namespace ciMonitor.Tests
         }
 
         [Test]
+        public void ReturnsUnknown()
+        {
+            Assert.That(_statusFactory.From("unknown"), Is.EqualTo(Status.Unknown()));
+        }
+
+        [Test]
         public void ReturnsSuccess()
         {
             Assert.That(_statusFactory.From("stable"), Is.EqualTo(Status.Success()));
@@ -31,6 +37,12 @@ namespace ciMonitor.Tests
         {
             Assert.That(_statusFactory.From("broken since this build"), Is.EqualTo(Status.Fail()));
             Assert.That(_statusFactory.From("broken since build #9"), Is.EqualTo(Status.Fail()));
+        }
+
+        [Test]
+        public void ReturnsBuilding()
+        {
+            Assert.That(_statusFactory.From("?"), Is.EqualTo(Status.Building()));
         }
     }
 }

@@ -17,6 +17,8 @@
                 case "stable":
                 case "back to normal":
                     return Status.Success();
+                case "?":
+                    return Status.Building();
                 default:
                     return Status.Unknown();
             }

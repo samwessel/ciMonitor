@@ -19,6 +19,11 @@
             return new Status("fail");
         }
 
+        public static Status Building()
+        {
+            return new Status("building");
+        }
+
         private Status(string status)
         {
             _status = status;
