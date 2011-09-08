@@ -13,20 +13,29 @@ namespace ciMonitor.Tests
         private string _status;
         private Mock<IStatusFactory> _mockStatusFactory;
         private Status _parsedStatus;
+        private int _buildNumber;
 
         [SetUp]
         public void WhenParsingValidJenkinsBuildTitle()
         {
-            _name = "asdfjasldfkasd";
+            _name = "asdfj.asldf.kasd";
             _status = "bndcvndcvm,ndsal";
-            var currentBuildStatus = _name + "(" + _status + ")";
+            _buildNumber = 123;
 
-            _mockStatusFactory = new Mock<IStatusFactory>();
+            var currentBuildStatus = _name + "#" + _buildNumber + " (" + _status + ")";
+
             _parsedStatus = Status.Success();
+            _mockStatusFactory = new Mock<IStatusFactory>();
             _mockStatusFactory.Setup(f => f.From(It.IsAny<string>())).Returns(_parsedStatus);
 
             var buildOutcomeFactory = new BuildOutcomeFactory(_mockStatusFactory.Object);
             _result = buildOutcomeFactory.CreateFrom(currentBuildStatus);
+        }
+
+        [Test]
+        public void ThenItCallsToStatusFactory()
+        {
+            _mockStatusFactory.Verify(factory => factory.From(_status));
         }
 
         [Test]
@@ -36,9 +45,9 @@ namespace ciMonitor.Tests
         }
 
         [Test]
-        public void ThenItCallsToStatusFactory()
+        public void ThenItSetsBuildNumber()
         {
-            _mockStatusFactory.Verify(factory => factory.From(_status));
+            Assert.That(_result.BuildNumber, Is.EqualTo(_buildNumber));
         }
 
         [Test]

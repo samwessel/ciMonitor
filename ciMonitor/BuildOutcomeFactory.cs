@@ -19,10 +19,17 @@ namespace ciMonitor
 
         public BuildOutcome CreateFrom(string currentBuildStatus)
         {
-            var strings = currentBuildStatus.TrimEnd(')').Split('(');
-            if (strings.Length != 2)
+            var splitByOpeningParenthesis = currentBuildStatus.Split('(');
+            var splitByHash = splitByOpeningParenthesis[0].Split('#');
+
+            if (splitByOpeningParenthesis.Length != 2 || splitByHash.Length != 2)
                 throw new FormatException("Build outcome could not be parsed from the following: " + currentBuildStatus);
-            return new BuildOutcome(strings[0], _statusFactory.From(strings[1]));
+
+            var buildName = splitByHash[0].Trim();
+            var buildNumber = int.Parse(splitByHash[1].Trim());
+            var status = _statusFactory.From(splitByOpeningParenthesis[1].TrimEnd(')'));
+
+            return new BuildOutcome(buildName, buildNumber, status);
         }
     }
 }

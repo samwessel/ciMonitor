@@ -3,7 +3,10 @@
 <span style="display:none"><%= DateTime.Now %></span>
 <ul>
     <% foreach (var buildStatus in Model.BuildOutcomes) { %>
-        <li class="<%= buildStatus.Status %>"><%= buildStatus.Name %></ li>
+        <li class="<%= buildStatus.Status %>">
+            <%= buildStatus.Name %>
+            <span class="buildNumber">#<%= buildStatus.BuildNumber %></span>
+        </ li>
     <% } %>
 </ul>
 

@@ -18,9 +18,9 @@ namespace ciMonitor.Tests
         public void GivenOnlySuccessfulOutcomesThenOverallStatusIsSuccess()
         {
             var buildOutcomes = new List<BuildOutcome>() { 
-                new BuildOutcome("", Status.Success()), 
-                new BuildOutcome("", Status.Success()), 
-                new BuildOutcome("", Status.Success())
+                new BuildOutcome("", 0, Status.Success()), 
+                new BuildOutcome("", 0, Status.Success()), 
+                new BuildOutcome("", 0, Status.Success())
             };
             var status = new BuildOutcomesViewModel(buildOutcomes).OverallStatus;
             Assert.That(status, Is.EqualTo(Status.Success()));
@@ -30,9 +30,9 @@ namespace ciMonitor.Tests
         public void GivenAnyBuildWithStatusFailThenOverallStatusIsFail()
         {
             var buildOutcomes = new List<BuildOutcome>() { 
-                new BuildOutcome("", Status.Success()), 
-                new BuildOutcome("", Status.Fail()),
-                new BuildOutcome("", Status.Success())
+                new BuildOutcome("", 0, Status.Success()), 
+                new BuildOutcome("", 0, Status.Fail()),
+                new BuildOutcome("", 0, Status.Success())
             }; 
             var status = new BuildOutcomesViewModel(buildOutcomes).OverallStatus;
             Assert.That(status, Is.EqualTo(Status.Fail()));
