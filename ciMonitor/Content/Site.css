@@ -26,9 +26,13 @@ li
     background-repeat: repeat-x;
 }
 
-.success
+#builds .success
 {
     display: none;
+}
+
+.success
+{
     background-color: Green;
 }
 
