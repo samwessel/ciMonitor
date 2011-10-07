@@ -13,12 +13,12 @@ namespace ciMonitor.Tests
     {
         private Mock<IRssParser> _mockJenkinsRssParser;
         private ViewResult _result;
-        private List<BuildOutcome> _buildOutcomes;
+        private BuildOutcomeCollection _buildOutcomes;
 
         [SetUp]
         public void WhenCallingIndex()
         {
-            _buildOutcomes = new List<BuildOutcome>();
+            _buildOutcomes = new BuildOutcomeCollection();
             _mockJenkinsRssParser = new Mock<IRssParser>();
             _mockJenkinsRssParser.Setup(parser => parser.LoadBuilds()).Returns(_buildOutcomes);
 
@@ -49,12 +49,12 @@ namespace ciMonitor.Tests
     {
         private Mock<IRssParser> _mockJenkinsRssParser;
         private ViewResult _result;
-        private List<BuildOutcome> _buildOutcomes;
+        private BuildOutcomeCollection _buildOutcomes;
 
         [SetUp]
         public void WhenCallingBuilds()
         {
-            _buildOutcomes = new List<BuildOutcome>();
+            _buildOutcomes = new BuildOutcomeCollection();
             _mockJenkinsRssParser = new Mock<IRssParser>();
             _mockJenkinsRssParser.Setup(parser => parser.LoadBuilds()).Returns(_buildOutcomes);
 

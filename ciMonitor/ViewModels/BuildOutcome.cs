@@ -12,5 +12,34 @@
         public string Name { get; private set; }
         public int BuildNumber { get; private set; }
         public Status Status { get; private set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (BuildOutcome)) 
+                return false;
+            return Equals((BuildOutcome) obj);
+        }
+
+        public bool Equals(BuildOutcome other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other.Name, Name) 
+                && other.BuildNumber == BuildNumber 
+                && Equals(other.Status, Status);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = (Name != null ? Name.GetHashCode() : 0);
+                result = (result*397) ^ BuildNumber;
+                result = (result*397) ^ (Status != null ? Status.GetHashCode() : 0);
+                return result;
+            }
+        }
     }
 }

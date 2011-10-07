@@ -14,6 +14,7 @@
     <AssemblyName>ciMonitor</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,12 +66,17 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildOutcomeCollection.cs" />
+    <Compile Include="BuildProperties.cs" />
+    <Compile Include="Builds.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="ISoundAnnouncer.cs" />
     <Compile Include="JenkinsRssParser.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoundAnnouncer.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="StatusFactory.cs" />
     <Compile Include="ViewModels\BuildOutcome.cs" />

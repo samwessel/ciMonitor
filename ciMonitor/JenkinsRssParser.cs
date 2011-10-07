@@ -8,7 +8,7 @@ namespace ciMonitor
 {
     public interface IRssParser
     {
-        IEnumerable<BuildOutcome> LoadBuilds();
+        BuildOutcomeCollection LoadBuilds();
     }
 
     public class JenkinsRssParser : IRssParser
@@ -27,7 +27,7 @@ namespace ciMonitor
             _buildOutcomeFactory = new BuildOutcomeFactory();
         }
 
-        public IEnumerable<BuildOutcome> LoadBuilds()
+        public BuildOutcomeCollection LoadBuilds()
         {
             var buildOutcomes = new List<BuildOutcome>();
             foreach (var serverUri in _serverUris)
@@ -36,13 +36,12 @@ namespace ciMonitor
             }
 
             var excludedBuilds = ConfigurationManager.AppSettings["ExcludedBuilds"].Split(',');
-
             foreach (var excludedBuild in excludedBuilds)
             {
                 buildOutcomes.RemoveAll(build => build.Name.StartsWith(excludedBuild));
             }
             
-            return buildOutcomes;
+            return new BuildOutcomeCollection(buildOutcomes);
         }
 
         private IEnumerable<BuildOutcome> GetServerBuildOutcomes(string serverUri)

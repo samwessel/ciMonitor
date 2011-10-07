@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ciMonitor.ViewModels;
+﻿using ciMonitor.ViewModels;
 using NUnit.Framework;
 
 namespace ciMonitor.Tests
@@ -10,14 +9,14 @@ namespace ciMonitor.Tests
         [Test]
         public void GivenNoOutcomesThenOverallStatusIsUnknown()
         {
-            var status = new BuildOutcomesViewModel(new List<BuildOutcome>()).OverallStatus;
+            var status = new BuildOutcomesViewModel(new BuildOutcomeCollection()).OverallStatus;
             Assert.That(status, Is.EqualTo(Status.Unknown()));
         }
 
         [Test]
         public void GivenOnlySuccessfulOutcomesThenOverallStatusIsSuccess()
         {
-            var buildOutcomes = new List<BuildOutcome>() { 
+            var buildOutcomes = new BuildOutcomeCollection() { 
                 new BuildOutcome("", 0, Status.Success()), 
                 new BuildOutcome("", 0, Status.Success()), 
                 new BuildOutcome("", 0, Status.Success())
@@ -29,7 +28,7 @@ namespace ciMonitor.Tests
         [Test]
         public void GivenAnyBuildWithStatusFailThenOverallStatusIsFail()
         {
-            var buildOutcomes = new List<BuildOutcome>() { 
+            var buildOutcomes = new BuildOutcomeCollection() { 
                 new BuildOutcome("", 0, Status.Success()), 
                 new BuildOutcome("", 0, Status.Fail()),
                 new BuildOutcome("", 0, Status.Success())
