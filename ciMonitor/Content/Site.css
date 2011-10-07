@@ -46,6 +46,11 @@ li
     background-color: Gray;
 }
 
+.building
+{
+    background-color: Yellow;
+}
+
 .buildNumber
 {
     font-size: 36pt;

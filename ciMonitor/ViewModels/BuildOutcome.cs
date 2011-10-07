@@ -15,8 +15,6 @@
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != typeof (BuildOutcome)) 
                 return false;
             return Equals((BuildOutcome) obj);
@@ -24,8 +22,6 @@
 
         public bool Equals(BuildOutcome other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
             return Equals(other.Name, Name) 
                 && other.BuildNumber == BuildNumber 
                 && Equals(other.Status, Status);

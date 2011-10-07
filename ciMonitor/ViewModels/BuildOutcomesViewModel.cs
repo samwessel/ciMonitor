@@ -4,10 +4,10 @@ namespace ciMonitor.ViewModels
 {
     public class BuildOutcomesViewModel
     {
-        public BuildOutcomesViewModel(BuildOutcomeCollection buildOutcomes)
+        public BuildOutcomesViewModel(IEnumerable<BuildOutcome> buildOutcomes, Status overallStatus)
         {
             BuildOutcomes = buildOutcomes;
-            OverallStatus = buildOutcomes.OverallStatus();
+            OverallStatus = overallStatus;
         }
 
         public IEnumerable<BuildOutcome> BuildOutcomes { get; private set; }

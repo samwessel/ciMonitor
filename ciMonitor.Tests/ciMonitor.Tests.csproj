@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildOutcomeCollectionTests.cs" />
-    <Compile Include="BuildOutcomesViewModelOverallStatusTests.cs" />
     <Compile Include="BuildsTestsGivenNoKnownBuildOutcomes.cs" />
     <Compile Include="HomeControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

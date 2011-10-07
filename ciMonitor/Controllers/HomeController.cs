@@ -20,12 +20,12 @@ namespace ciMonitor.Controllers
 
         public ViewResult Index()
         {
-            return View(new BuildOutcomesViewModel(_rssParser.LoadBuilds()));
+            return View(ciMonitor.Builds.Instance.Update(_rssParser.LoadBuilds()));
         }
 
         public ViewResult Builds()
         {
-            return View(new BuildOutcomesViewModel(_rssParser.LoadBuilds()));
+            return View(ciMonitor.Builds.Instance.Update(_rssParser.LoadBuilds()));
         }
     }
 }

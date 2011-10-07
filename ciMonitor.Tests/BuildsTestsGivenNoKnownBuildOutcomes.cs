@@ -19,7 +19,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _successfulBuildOutcome = new BuildOutcome("buildName", 11, Status.Success());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, new Dictionary<string, BuildProperties>(), Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() {_successfulBuildOutcome});
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() {_successfulBuildOutcome});
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _successfulBuildOutcome = new BuildOutcome(buildname, 11, Status.Success());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Success());
-            _result = Builds.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _inProgressBuildOutcome = new BuildOutcome(buildname, 11, Status.Building());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Success());
-            _result = Builds.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace ciMonitor.Tests
             var builds = new Dictionary<string, BuildProperties> { { buildname, new BuildProperties(11, Status.Success(), true) } };
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Success());
             _failedBuildOutcome = new BuildOutcome(buildname, 11, Status.Fail());
-            _result = Builds.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _failingBuildOutcome = new BuildOutcome("buildName", 11, Status.Fail());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, new Dictionary<string, BuildProperties>(), Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() { _failingBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _failingBuildOutcome });
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _successfulBuildOutcome = new BuildOutcome(buildname, 11, Status.Success());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Fail());
-            _result = Builds.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _inProgressBuildOutcome = new BuildOutcome(buildname, 11, Status.Building());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Fail());
-            _result = Builds.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
         }
 
         [Test]
@@ -261,7 +261,8 @@ namespace ciMonitor.Tests
         [Test]
         public void ThenTheCorrectBuildOutcomeIsReturned()
         {
-            Assert.That(_result.BuildOutcomes.First(), Is.EqualTo(_inProgressBuildOutcome));
+            var buildOutcome = _result.BuildOutcomes.First();
+            Assert.That(buildOutcome, Is.EqualTo(_inProgressBuildOutcome));
         }
     }
 
@@ -280,7 +281,7 @@ namespace ciMonitor.Tests
             var builds = new Dictionary<string, BuildProperties> { { buildname, new BuildProperties(11, Status.Fail(), true) } };
             _failedBuildOutcome = new BuildOutcome(buildname, 11, Status.Fail());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Fail());
-            _result = Builds.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
         }
 
         [Test]
@@ -314,7 +315,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _unknownBuildOutcome = new BuildOutcome("buildName", 11, Status.Unknown());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, new Dictionary<string, BuildProperties>(), Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() { _unknownBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _unknownBuildOutcome });
         }
 
         [Test]
@@ -352,7 +353,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _successfulBuildOutcome = new BuildOutcome(buildname, 11, Status.Success());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
         }
 
         [Test]
@@ -390,7 +391,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _inProgressBuildOutcome = new BuildOutcome(buildname, 11, Status.Building());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
         }
 
         [Test]
@@ -427,7 +428,7 @@ namespace ciMonitor.Tests
             var builds = new Dictionary<string, BuildProperties> { { buildname, new BuildProperties(11, Status.Unknown(), true) } };
             _failedBuildOutcome = new BuildOutcome(buildname, 11, Status.Fail());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
         }
 
         [Test]
@@ -465,7 +466,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _successfulBuildOutcome = new BuildOutcome(buildname, 11, Status.Success());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Success());
-            _result = Builds.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _successfulBuildOutcome });
         }
 
         [Test]
@@ -503,7 +504,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _inProgressBuildOutcome = new BuildOutcome(buildname, 11, Status.Building());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Success());
-            _result = Builds.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
         }
 
         [Test]
@@ -541,7 +542,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _inProgressBuildOutcome = new BuildOutcome(buildname, 11, Status.Building());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Fail());
-            _result = Builds.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
         }
 
         [Test]
@@ -578,7 +579,7 @@ namespace ciMonitor.Tests
             var builds = new Dictionary<string, BuildProperties> { { buildname, new BuildProperties(11, Status.Fail(), false) } };
             _failedBuildOutcome = new BuildOutcome(buildname, 11, Status.Fail());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Fail());
-            _result = Builds.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _failedBuildOutcome });
         }
 
         [Test]
@@ -616,7 +617,7 @@ namespace ciMonitor.Tests
             _mockSoundAnnouncer = new Mock<ISoundAnnouncer>();
             _inProgressBuildOutcome = new BuildOutcome(buildname, 11, Status.Building());
             Builds.Instance = new Builds(_mockSoundAnnouncer.Object, builds, Status.Unknown());
-            _result = Builds.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
+            _result = Builds.Instance.Update(new BuildOutcomeCollection() { _inProgressBuildOutcome });
         }
 
         [Test]

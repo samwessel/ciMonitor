@@ -1,39 +1,46 @@
-﻿using System;
-using System.Media;
+﻿using System.Media;
 
 namespace ciMonitor
 {
     public class SoundAnnouncer : ISoundAnnouncer
     {
+        private readonly SoundPlayer _soundPlayer;
+
+        public SoundAnnouncer()
+        {
+            _soundPlayer = new SoundPlayer();
+            _soundPlayer.SoundLocation = @"C:\sounds\newBuild.wav";
+            _soundPlayer.LoadAsync();
+        }
+
         public void NewBuild()
         {
-            throw new NotImplementedException();
-            new SoundPlayer(@"C:\sounds\newBuild.wav").Play();
+            _soundPlayer.Play();
         }
 
         public void FailedBuild()
         {
-            throw new NotImplementedException();
+            _soundPlayer.Play();
         }
 
         public void SuccessfulBuild()
         {
-            throw new NotImplementedException();
+            _soundPlayer.Play();
         }
 
         public void FixedBuild()
         {
-            throw new NotImplementedException();
+            _soundPlayer.Play();
         }
 
         public void StillFailing()
         {
-            throw new NotImplementedException();
+            _soundPlayer.Play();
         }
 
         public void BuildStarted()
         {
-            throw new NotImplementedException();
+            _soundPlayer.Play();
         }
     }
 }

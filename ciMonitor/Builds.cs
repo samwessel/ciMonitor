@@ -8,12 +8,17 @@ namespace ciMonitor
         private static ISoundAnnouncer _soundAnnouncer;
         private static Dictionary<string, BuildProperties> _builds;
 
-        private static Builds _instance = null;
         private static Status _overallStatus;
 
+        private static Builds _instance;
         public static Builds Instance
         {
-            get { return _instance ?? new Builds(new SoundAnnouncer(), new Dictionary<string, BuildProperties>(), Status.Unknown()); }
+            get
+            {
+                if (_instance == null)
+                    _instance = new Builds(new SoundAnnouncer(), new Dictionary<string, BuildProperties>(), Status.Unknown());
+                return _instance;
+            }
             set { _instance = value; }
         }
 
@@ -29,7 +34,7 @@ namespace ciMonitor
             return _overallStatus;
         }
 
-        public static BuildOutcomesViewModel Update(BuildOutcomeCollection buildOutcomes)
+        public BuildOutcomesViewModel Update(BuildOutcomeCollection buildOutcomes)
         {
             foreach (var buildOutcome in buildOutcomes)
             {
@@ -79,7 +84,7 @@ namespace ciMonitor
 
             if (!buildOutcomes.OverallStatus().Equals(Status.Building()))
                 _overallStatus = buildOutcomes.OverallStatus();
-            return new BuildOutcomesViewModel(buildOutcomes);
+            return new BuildOutcomesViewModel(buildOutcomes, _overallStatus);
         }
     }
 }
