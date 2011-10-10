@@ -5,26 +5,21 @@ namespace ciMonitor
 {
     public class Builds
     {
-        private static ISoundAnnouncer _soundAnnouncer;
+        private static IAnnouncer _announcer;
         private static Dictionary<string, BuildProperties> _builds;
-
         private static Status _overallStatus;
+        private static bool _initialised;
 
         private static Builds _instance;
         public static Builds Instance
         {
-            get
-            {
-                if (_instance == null)
-                    _instance = new Builds(new SoundAnnouncer(), new Dictionary<string, BuildProperties>(), Status.Unknown());
-                return _instance;
-            }
-            set { _instance = value; }
+            get { return _instance ?? (_instance = new Builds(new Announcer(), new Dictionary<string, BuildProperties>(), Status.Unknown())); }
+            set { _instance = value; _initialised = true; }
         }
 
-        public Builds(ISoundAnnouncer soundAnnouncer, Dictionary<string, BuildProperties> builds, Status initialStatus)
+        public Builds(IAnnouncer announcer, Dictionary<string, BuildProperties> builds, Status initialStatus)
         {
-            _soundAnnouncer = soundAnnouncer;
+            _announcer = announcer;
             _builds = builds;
             _overallStatus = initialStatus;
         }
@@ -34,57 +29,76 @@ namespace ciMonitor
             return _overallStatus;
         }
 
-        public BuildOutcomesViewModel Update(BuildOutcomeCollection buildOutcomes)
+        public BuildOutcomesViewModel Initialise(BuildOutcomeCollection buildOutcomes)
         {
+            _builds = new Dictionary<string, BuildProperties>();
             foreach (var buildOutcome in buildOutcomes)
             {
                 var isBuilding = buildOutcome.Status.Equals(Status.Building());
-                var lastKnownStatus = (_builds.ContainsKey(buildOutcome.Name)) ? _builds[buildOutcome.Name].Status : Status.Unknown();
-                var newBuildStatus = isBuilding ? lastKnownStatus : buildOutcome.Status;
-                var buildProperties = new BuildProperties(buildOutcome.BuildNumber, newBuildStatus, isBuilding);
+                var newBuildStatus = isBuilding ? Status.Unknown() : buildOutcome.Status;
+                _builds.Add(buildOutcome.Name, new BuildProperties(buildOutcome.BuildNumber, newBuildStatus, isBuilding));
+            }
+            _initialised = true;
 
-                if (!_builds.ContainsKey(buildOutcome.Name))
-                {
-                    _soundAnnouncer.NewBuild();
-                }
-                else
-                {
-                    if (isBuilding != _builds[buildOutcome.Name].IsBuilding)
-                    {
-                        if (isBuilding)
-                        {
-                            _soundAnnouncer.BuildStarted();
-                        }
-                        else
-                        {
-                            if (newBuildStatus.Equals(Status.Fail()))
-                            {
-                                if (lastKnownStatus.Equals(Status.Success()))
-                                    _soundAnnouncer.FailedBuild();
-                                else
-                                    _soundAnnouncer.StillFailing();
-                            }
+            if (!buildOutcomes.OverallStatus().Equals(Status.Building()))
+                _overallStatus = buildOutcomes.OverallStatus();
+            return new BuildOutcomesViewModel(buildOutcomes, _overallStatus);
+        }
 
-                            if (newBuildStatus.Equals(Status.Success()))
-                            {
-                                if (lastKnownStatus.Equals(Status.Success()))
-                                    _soundAnnouncer.SuccessfulBuild();
-                                else
-                                    _soundAnnouncer.FixedBuild();
-                            }
-                        }
-                    }
-                }
+        public BuildOutcomesViewModel Update(BuildOutcomeCollection buildOutcomes)
+        {
+            if (!_initialised)
+                return Initialise(buildOutcomes);
 
-                if (!_builds.ContainsKey(buildOutcome.Name))
-                    _builds.Add(buildOutcome.Name, buildProperties);
-                else
-                    _builds[buildOutcome.Name] = buildProperties;
+            foreach (var buildOutcome in buildOutcomes)
+            {
+                Update(buildOutcome);
             }
 
             if (!buildOutcomes.OverallStatus().Equals(Status.Building()))
                 _overallStatus = buildOutcomes.OverallStatus();
             return new BuildOutcomesViewModel(buildOutcomes, _overallStatus);
+        }
+
+        private static void Update(BuildOutcome buildOutcome)
+        {
+            if (!_builds.ContainsKey(buildOutcome.Name))
+            {
+                _builds.Add(buildOutcome.Name, new BuildProperties(buildOutcome.BuildNumber, Status.Unknown(), false));
+                _announcer.NewBuild();
+            }
+
+            var isBuilding = buildOutcome.Status.Equals(Status.Building());
+            var previousBuildProperties = _builds[buildOutcome.Name];
+
+            if (isBuilding != previousBuildProperties.IsBuilding)
+            {
+                if (isBuilding)
+                {
+                    _announcer.BuildStarted();
+                }
+                else
+                {
+                    if (buildOutcome.Status.Equals(Status.Fail()))
+                    {
+                        if (previousBuildProperties.Status.Equals(Status.Success()))
+                            _announcer.FailedBuild();
+                        else
+                            _announcer.StillFailing();
+                    }
+
+                    if (buildOutcome.Status.Equals(Status.Success()))
+                    {
+                        if (previousBuildProperties.Status.Equals(Status.Success()))
+                            _announcer.SuccessfulBuild();
+                        else
+                            _announcer.FixedBuild();
+                    }
+                }
+            }
+
+            var newBuildStatus = isBuilding ? previousBuildProperties.Status : buildOutcome.Status;
+            _builds[buildOutcome.Name] = new BuildProperties(buildOutcome.BuildNumber, newBuildStatus, isBuilding);
         }
     }
 }

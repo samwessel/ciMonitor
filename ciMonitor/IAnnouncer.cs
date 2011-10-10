@@ -1,6 +1,6 @@
 ﻿namespace ciMonitor
 {
-    public interface ISoundAnnouncer
+    public interface IAnnouncer
     {
         void NewBuild();
         void FailedBuild();
