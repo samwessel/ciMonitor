@@ -84,10 +84,13 @@
     <Compile Include="ViewModels\BuildOutcomesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\DoubleFacePalm.jpg" />
     <Content Include="Global.asax" />
     <Content Include="Views\Home\Builds.ascx" />
     <Content Include="Views\Home\Error.ascx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

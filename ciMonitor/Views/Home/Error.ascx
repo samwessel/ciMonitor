@@ -8,7 +8,8 @@
     </ li>
 </ul>
 
-<span style="display:none"><%= Model.StackTrace %></span>
+<img src="<%= Url.Content("~/Content/DoubleFacePalm.jpg") %>" alt="Double facepalm" />
+<div style="display:none"><%= Model.StackTrace %></div>
 
 <script type="text/javascript">
     $(function () {
