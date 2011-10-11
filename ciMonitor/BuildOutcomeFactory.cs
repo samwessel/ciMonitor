@@ -13,17 +13,17 @@ namespace ciMonitor
         }
 
         public BuildOutcomeFactory()
-            : this(new StatusFactory())
+            : this(new JenkinsStatusFactory())
         {
         }
 
-        public BuildOutcome CreateFrom(string currentBuildStatus)
+        public BuildOutcome CreateFrom(string jenkinsCurrentBuildStatus)
         {
-            var splitByOpeningParenthesis = currentBuildStatus.Split('(');
+            var splitByOpeningParenthesis = jenkinsCurrentBuildStatus.Split('(');
             var splitByHash = splitByOpeningParenthesis[0].Split('#');
 
             if (splitByOpeningParenthesis.Length != 2 || splitByHash.Length != 2)
-                throw new FormatException("Build outcome could not be parsed from the following: " + currentBuildStatus);
+                throw new FormatException("Build outcome could not be parsed from the following: " + jenkinsCurrentBuildStatus);
 
             var buildName = splitByHash[0].Trim();
             var buildNumber = int.Parse(splitByHash[1].Trim());

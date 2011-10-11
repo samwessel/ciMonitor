@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace ciMonitor.Controllers
 {
@@ -24,7 +25,14 @@ namespace ciMonitor.Controllers
 
         public ViewResult Builds()
         {
-            return View(ciMonitor.Builds.Instance.Update(_rssParser.LoadBuilds()));
+            try
+            {
+                return View(ciMonitor.Builds.Instance.Update(_rssParser.LoadBuilds()));
+            }
+            catch (Exception exception)
+            {
+                return View("Error", exception);
+            }
         }
     }
 }

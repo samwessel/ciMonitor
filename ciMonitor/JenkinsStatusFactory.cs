@@ -5,7 +5,7 @@
         Status From(string status);
     }
 
-    public class StatusFactory : IStatusFactory
+    public class JenkinsStatusFactory : IStatusFactory
     {
         public Status From(string status)
         {
