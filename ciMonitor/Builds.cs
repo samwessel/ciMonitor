@@ -30,7 +30,6 @@ namespace ciMonitor
                 if (!_builds.ContainsKey(buildOutcome.Name))
                 {
                     _builds.Add(buildOutcome.Name, new BuildProperties(buildOutcome.BuildNumber, Status.Unknown(), false));
-                    _transitions.Add(Transitions.NewBuild);
                 }
 
                 var isBuilding = buildOutcome.Status.Equals(Status.Building());

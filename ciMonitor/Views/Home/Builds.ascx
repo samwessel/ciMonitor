@@ -13,4 +13,8 @@
     $(function () {
         $('body').attr('class', '<%= Model.OverallStatus %>');
     });
+
+    <% foreach (var transition in Model.Transitions) { %>
+        soundManager.play('<%= transition %>');
+    <% } %>
 </script>

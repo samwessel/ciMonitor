@@ -20,12 +20,6 @@ namespace ciMonitor.Tests
         }
 
         [Test]
-        public void ThenTheResultContainsNewBuildTransition()
-        {
-            Assert.That(_result.Transitions, Is.EqualTo(new List<string>() { Transitions.NewBuild }));
-        }
-
-        [Test]
         public void ThenTheOverallStatusIsSuccess()
         {
             Assert.That(_result.OverallStatus, Is.EqualTo(Status.Success()));
@@ -160,12 +154,6 @@ namespace ciMonitor.Tests
         }
 
         [Test]
-        public void ThenTheResultContainsNewBuildTransition()
-        {
-            Assert.That(_result.Transitions, Is.EqualTo(new List<string>() { Transitions.NewBuild }));
-        }
-
-        [Test]
         public void ThenTheOverallStatusIsFail()
         {
             Assert.That(_result.OverallStatus, Is.EqualTo(Status.Fail()));
@@ -297,12 +285,6 @@ namespace ciMonitor.Tests
             _unknownBuildOutcome = new BuildOutcome("buildName", 11, Status.Unknown());
             Builds.Instance = new Builds(new Dictionary<string, BuildProperties>(), Status.Unknown());
             _result = Builds.Instance.Update(new BuildOutcomeCollection() { _unknownBuildOutcome });
-        }
-
-        [Test]
-        public void ThenTheResultContainsNewBuildTransition()
-        {
-            Assert.That(_result.Transitions, Is.EqualTo(new List<string>() { Transitions.NewBuild }));
         }
 
         [Test]

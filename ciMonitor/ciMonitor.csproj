@@ -84,7 +84,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\DoubleFacePalm.jpg" />
+    <Content Include="Content\Sounds\BuildStarted.wav" />
+    <Content Include="Content\Sounds\FailedBuild.wav" />
+    <Content Include="Content\Sounds\FixedBuild.wav" />
+    <Content Include="Content\Sounds\RepeatedlyFailingBuild.wav" />
+    <Content Include="Content\Sounds\SuccessfulBuild.wav" />
+    <Content Include="Content\SWF\soundmanager2.swf" />
+    <Content Include="Content\SWF\soundmanager2_flash9.swf" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\soundmanager2-nodebug-jsmin.js" />
     <Content Include="Views\Home\Builds.ascx" />
     <Content Include="Views\Home\Error.ascx" />
     <Content Include="Web.config">
