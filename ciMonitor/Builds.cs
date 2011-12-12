@@ -5,37 +5,32 @@ namespace ciMonitor
 {
     public class Builds
     {
-        private static IAnnouncer _announcer;
         private static Dictionary<string, BuildProperties> _builds;
         private static Status _overallStatus;
         private static Builds _instance;
+        private IList<string> _transitions;
 
         public static Builds Instance
         {
-            get { return _instance ?? (_instance = new Builds(new Announcer(), new Dictionary<string, BuildProperties>(), Status.Unknown())); }
+            get { return _instance ?? (_instance = new Builds(new Dictionary<string, BuildProperties>(), Status.Unknown())); }
             set { _instance = value; }
         }
 
-        public Builds(IAnnouncer announcer, Dictionary<string, BuildProperties> builds, Status initialStatus)
+        public Builds(Dictionary<string, BuildProperties> builds, Status initialStatus)
         {
-            _announcer = announcer;
             _builds = builds;
             _overallStatus = initialStatus;
         }
 
-        public static Status OverallStatus()
-        {
-            return _overallStatus;
-        }
-
         public BuildOutcomesViewModel Update(IBuildOutcomeCollection buildOutcomes)
         {
+            _transitions = new List<string>();
             foreach (var buildOutcome in buildOutcomes)
             {
                 if (!_builds.ContainsKey(buildOutcome.Name))
                 {
                     _builds.Add(buildOutcome.Name, new BuildProperties(buildOutcome.BuildNumber, Status.Unknown(), false));
-                    _announcer.NewBuild();
+                    _transitions.Add(Transitions.NewBuild);
                 }
 
                 var isBuilding = buildOutcome.Status.Equals(Status.Building());
@@ -45,24 +40,24 @@ namespace ciMonitor
                 {
                     if (isBuilding)
                     {
-                        _announcer.BuildStarted();
+                        _transitions.Add(Transitions.BuildStarted);
                     }
                     else
                     {
                         if (buildOutcome.Status.Equals(Status.Fail()))
                         {
                             if (previousBuildProperties.Status.Equals(Status.Success()))
-                                _announcer.FailedBuild();
+                                _transitions.Add(Transitions.FailedBuild);
                             else
-                                _announcer.StillFailing();
+                                _transitions.Add(Transitions.RepeatedlyFailingBuild);
                         }
 
                         if (buildOutcome.Status.Equals(Status.Success()))
                         {
                             if (previousBuildProperties.Status.Equals(Status.Success()))
-                                _announcer.SuccessfulBuild();
+                                _transitions.Add(Transitions.SuccessfulBuild);
                             else
-                                _announcer.FixedBuild();
+                                _transitions.Add(Transitions.FixedBuild);
                         }
                     }
                 }
@@ -73,7 +68,7 @@ namespace ciMonitor
 
             if (!buildOutcomes.OverallStatus().Equals(Status.Building()))
                 _overallStatus = buildOutcomes.OverallStatus();
-            return new BuildOutcomesViewModel(buildOutcomes, _overallStatus);
+            return new BuildOutcomesViewModel(buildOutcomes, _overallStatus, _transitions);
         }
     }
 }
