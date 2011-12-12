@@ -9,7 +9,7 @@
     {
         public Status From(string status)
         {
-            if (status.StartsWith("broken"))
+            if (status.StartsWith("broken") || status == "aborted")
                 return Status.Fail();
 
             switch (status)

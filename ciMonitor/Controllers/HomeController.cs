@@ -20,7 +20,7 @@ namespace ciMonitor.Controllers
 
         public ViewResult Index()
         {
-            return View(ciMonitor.Builds.Instance.Initialise(_rssParser.LoadBuilds()));
+            return View(ciMonitor.Builds.Instance.Update(_rssParser.LoadBuilds()));
         }
 
         public ViewResult Builds()

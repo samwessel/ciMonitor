@@ -40,6 +40,12 @@ namespace ciMonitor.Tests
         }
 
         [Test]
+        public void AbortedBuildsInterpretedAsFailures()
+        {
+            Assert.That(_jenkinsStatusFactory.From("aborted"), Is.EqualTo(Status.Fail()));
+        }
+
+        [Test]
         public void ReturnsBuilding()
         {
             Assert.That(_jenkinsStatusFactory.From("?"), Is.EqualTo(Status.Building()));
