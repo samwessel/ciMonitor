@@ -85,10 +85,10 @@
   <ItemGroup>
     <Content Include="Content\DoubleFacePalm.jpg" />
     <Content Include="Content\Sounds\BuildStarted.wav" />
-    <Content Include="Content\Sounds\FailedBuild.wav" />
-    <Content Include="Content\Sounds\FixedBuild.wav" />
-    <Content Include="Content\Sounds\RepeatedlyFailingBuild.wav" />
-    <Content Include="Content\Sounds\SuccessfulBuild.wav" />
+    <Content Include="Content\Sounds\FailedBuild.mp3" />
+    <Content Include="Content\Sounds\FixedBuild.mp3" />
+    <Content Include="Content\Sounds\RepeatedlyFailingBuild.mp3" />
+    <Content Include="Content\Sounds\SuccessfulBuild.mp3" />
     <Content Include="Content\SWF\soundmanager2.swf" />
     <Content Include="Content\SWF\soundmanager2_flash9.swf" />
     <Content Include="Global.asax" />

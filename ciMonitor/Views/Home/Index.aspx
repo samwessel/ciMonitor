@@ -16,7 +16,7 @@
                 soundIds.map(function (soundId) {
                     soundManager.createSound({
                         id: soundId,
-                        url: soundPath + soundId + '.wav'
+                        url: soundPath + soundId + '.mp3'
                     });
                 });
             });
