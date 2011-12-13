@@ -84,7 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\DoubleFacePalm.jpg" />
-    <Content Include="Content\Sounds\BuildStarted.wav" />
     <Content Include="Content\Sounds\FailedBuild.mp3" />
     <Content Include="Content\Sounds\FixedBuild.mp3" />
     <Content Include="Content\Sounds\RepeatedlyFailingBuild.mp3" />
