@@ -21,18 +21,19 @@
                 });
             });
 
-            function refreshBuildStatuses() {
-                $.ajax({
-                    url: '<%= Url.Action("Builds", "Home") %>',
-                    cache: false,
-                    success: function (data) {
-                        $('#builds').html(data);
-                    }
-                });
-            }
-
-            $(document).ready(function() {
-                setInterval(refreshBuildStatuses, 3000);
+            $(document).ready(function () {
+                var lastData = null;
+                setInterval(function () {
+                    $.ajax({
+                        url: 'http://localhost:8080/api/json?format=json',
+                        dataType: "json",
+                        success: function (data) {
+                            $(data.jobs).each(function () {
+                                $('#builds ul').append("<li>" + this.name + "</li>");
+                            });
+                        }
+                    });
+                }, 3000);
             });   
         </script>
     </head>
@@ -42,9 +43,25 @@
             <img src="http://www.esendex.co.uk/sites/all/themes/Esendex_v3/newheaderimages/esendex-logo.jpg" alt="" />
         </div>
         <div id="builds">
-            <% Html.RenderPartial("Builds", Model); %>
+            <ul>
+                <% foreach (var buildStatus in Model.BuildOutcomes) { %>
+                    <li class="<%= buildStatus.Status %>">
+                        <%= buildStatus.Name %>
+                        <span class="buildNumber">#<%= buildStatus.BuildNumber %></span>
+                    </ li>
+                <% } %>
+            </ul>
+
+            <script type="text/javascript">
+                $(function () {
+                    $('body').attr('class', '<%= Model.OverallStatus %>');
+                });
+
+                <% foreach (var transition in Model.Transitions) { %>
+                    soundManager.play('<%= transition %>');
+                <% } %>
+            </script>        
         </div>
     </body>
-
 </html>
 
