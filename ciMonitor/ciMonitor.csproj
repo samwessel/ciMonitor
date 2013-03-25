@@ -66,21 +66,11 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildOutcomeCollection.cs" />
-    <Compile Include="BuildProperties.cs" />
-    <Compile Include="Builds.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="JenkinsRssParser.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Status.cs" />
-    <Compile Include="JenkinsStatusFactory.cs" />
-    <Compile Include="Transitions.cs" />
-    <Compile Include="ViewModels\BuildOutcome.cs" />
-    <Compile Include="BuildOutcomeFactory.cs" />
-    <Compile Include="ViewModels\BuildOutcomesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\DoubleFacePalm.jpg" />

@@ -20,33 +20,34 @@ li
     list-style: none;
 }
 
-#header {
-    height: 82px;
-    background-image: url('http://www.esendex.co.uk/sites/all/themes/Esendex_v3/newheaderimages/slice.jpg');
-    background-repeat: repeat-x;
-}
-
-#builds .success
+#builds .success,
+#builds .blue,
+#builds .disabled
 {
     display: none;
 }
 
-.success
+.success,
+.blue
 {
     background-color: Green;
 }
 
-.fail
+.fail,
+.red
 {
     background-color: Red;
 }
 
-.unknown
+.unknown,
+.disabled
 {
     background-color: Gray;
 }
 
-.building
+.building,
+.blue_anime,
+.red_anime
 {
     background-color: Yellow;
 }

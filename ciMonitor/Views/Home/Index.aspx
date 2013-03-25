@@ -1,6 +1,5 @@
-﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage<ciMonitor.ViewModels.BuildOutcomesViewModel>" %>
+﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
 <html>
-
     <head>
         <title>ciMonitor</title>
         <link href="<%= Url.Content("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
@@ -25,43 +24,50 @@
                 var lastData = null;
                 setInterval(function () {
                     $.ajax({
-                        url: 'http://localhost:8080/api/json?format=json',
-                        dataType: "json",
+                        url: 'http://buildsrvr01/api/json?format=json&jsonp=?',
+                        dataType: "jsonp",
                         success: function (data) {
+                            $('#builds ul').html("");
                             $(data.jobs).each(function () {
-                                $('#builds ul').append("<li>" + this.name + "</li>");
+                                $('#builds ul').append("<li class=\"" + this.color + "\">" + this.name + "</li>");
                             });
+                            $('body').attr('class', overallStatus(data.jobs));
                         }
                     });
-                }, 3000);
+                }, 5000);
             });   
         </script>
     </head>
 
     <body>
-        <div id="header">
-            <img src="http://www.esendex.co.uk/sites/all/themes/Esendex_v3/newheaderimages/esendex-logo.jpg" alt="" />
-        </div>
         <div id="builds">
             <ul>
-                <% foreach (var buildStatus in Model.BuildOutcomes) { %>
-                    <li class="<%= buildStatus.Status %>">
-                        <%= buildStatus.Name %>
-                        <span class="buildNumber">#<%= buildStatus.BuildNumber %></span>
-                    </ li>
-                <% } %>
+                <li>Contacting build server...</li>
             </ul>
+        </div>
 
-            <script type="text/javascript">
-                $(function () {
-                    $('body').attr('class', '<%= Model.OverallStatus %>');
+        <script type="text/javascript">
+            
+            function overallStatus(jobs) {
+                var statuses = {};
+                $(jobs).each(function () {
+                    if (!statuses[this.color])
+                        statuses[this.color] = 0;
+                    statuses[this.color]++;
                 });
 
-                <% foreach (var transition in Model.Transitions) { %>
-                    soundManager.play('<%= transition %>');
-                <% } %>
-            </script>        
-        </div>
+                if (jobs.length > 0 && jobs.length == statuses["blue"])
+                    return "blue";
+                if (statuses["red"] > 0)
+                    return "red";
+                if (statuses["unknown"] > 0)
+                    return "unknown";
+                if (statuses["blue_anime"] > 0)
+                    return "blue_anime";
+                return "unknown";
+            }
+
+        </script>        
     </body>
 </html>
 
