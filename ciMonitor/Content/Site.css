@@ -34,7 +34,8 @@ li
 }
 
 .fail,
-.red
+.red,
+.aborted
 {
     background-color: Red;
 }

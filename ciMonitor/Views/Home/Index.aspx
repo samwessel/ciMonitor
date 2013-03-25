@@ -58,7 +58,7 @@
 
                 if (jobs.length > 0 && jobs.length == statuses["blue"])
                     return "blue";
-                if (statuses["red"] > 0)
+                if (statuses["red"] > 0 || statuses["aborted"] > 0)
                     return "red";
                 if (statuses["unknown"] > 0)
                     return "unknown";
