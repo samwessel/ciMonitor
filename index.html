@@ -16,14 +16,13 @@
         <script src="js/soundmanager2-nodebug-jsmin.js" type="text/javascript"></script>
         <script type="text/javascript">
             var soundIds = ["started", "successful", "failed", "fixed", "repeatedlyFailing"];
-            var soundPath = "sounds/";
             soundManager.url = "swf/";
             soundManager.debugMode = false;
             soundManager.onready(function () {
                 soundIds.map(function (soundId) {
                     soundManager.createSound({
                         id: soundId,
-                        url: soundPath + soundId + '.mp3'
+                        url: "sounds/" + soundId + '.mp3'
                     });
                 });
             });
@@ -32,21 +31,37 @@
                 var lastData = null;
                 setInterval(function () {
                     $.ajax({
-						url: "http://buildsrvr01/api/json?format=json&jsonp=?",
-                        dataType: "jsonp"
+						url: "http://buildslave01/view/All/api/json?format=json&jsonp=?",
+                        dataType: "jsonp",
+						timeout: 5000
 					}).done(function (data) {
 						$("#builds ul").html("");
-						$(data.jobs).each(function () {
+						$(data.jobs).each(function (index) {
 							$("#builds ul").append("<li class=\"" + this.color + "\">" + this.name + "</li>");
+							
+							if (lastData) {
+								if (this.color=="blue" && lastData.jobs[index].color=="blue_anime")
+									soundManager.play("successful");
+								if (this.color=="blue" && lastData.jobs[index].color=="red_anime")
+									soundManager.play("fixed");
+								if (this.color=="red" && lastData.jobs[index].color=="blue_anime")
+									soundManager.play("failed");
+								if (this.color=="red" && lastData.jobs[index].color=="red_anime")
+									soundManager.play("repeatedlyFailing");
+								if (this.color.match(/_anime$/) && !lastData.jobs[index].color.match(/_anime$/)
+									soundManager.play("started");								
+							}
 						});
 						$('body').attr("class", overallStatus(data.jobs));
+						
+						lastData = data;
+						
 					}).fail(function() {
 						$("#builds ul").html("<li class=\"red\">Error contacting server</li>");
-						$("#builds ul").append("<li><img src=\"img/DoubleFacePalm.jpg\" alt=\"Double facepalm\" /></li>");
-						$('body').attr("class", "unknown");
+						$('body').attr("class", "error");
 					});
                 }, 5000);
-            });   
+            }); 		
             
             function overallStatus(jobs) {
                 var statuses = {};
