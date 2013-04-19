@@ -6,7 +6,12 @@
     </head>
 
     <body>
-		<audio name="sound" id="sound"></audio>
+		<audio id="successful" src="sound/successful.mp3"></audio>
+		<audio id="failed" src="sound/failed.mp3"></audio>
+		<audio id="fixed" src="sound/fixed.mp3"></audio>
+		<audio id="started" src="sound/started.mp3"></audio>
+		<audio id="repeatedlyFailing" src="sound/repeatedlyFailing.mp3"></audio>
+		
         <div id="builds">
             <ul>
                 <li>Contacting build server...</li>
@@ -16,73 +21,49 @@
         <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script> 
         <script type="text/javascript">
 
-			var sounds = [];
-			var soundQueue = {
-				add: function (sound_url) {
-					sounds.push("sound/" + sound_url + ".mp3");
-				},
-				play: function () {
-					if (sounds.length > 0) {
-						var soundPlayer = $("#sound")[0];
-						if (soundPlayer.paused) {
-							soundPlayer.src = sounds.shift();
-							soundPlayer.play();
-						}
-					}
-				}
-			};
-
             $(document).ready(function () {
                 var lastData = null;
-				var contact = false;
-				
                 setInterval(function () {
                     $.ajax({
 						url: "http://buildslave01/view/All/api/json?format=json&jsonp=?",
                         dataType: "jsonp",
 						timeout: 5000
 					}).done(function (data) {
-						if (!contact) {
-							contact = true;
-							soundQueue.add("started");
-						}
-						
 						$("#builds ul").html("");
+						var transitions = [];
 						$(data.jobs).each(function (index) {
 							$("#builds ul").append("<li class=\"" + this.color + "\">" + this.name + "</li>");
 							
 							if (lastData) {
 								var transition = transitionFor(this.color, lastData.jobs[index]);
 								if (transition)
-									soundQueue.add(transition);
+									transitions.push(transition);
 							}
+						});
+						$(transitions).each(function() {
+							$("audio#"+this)[0].play();
 						});
 						$('body').attr("class", overallStatus(data.jobs));
 						lastData = data;
 					}).fail(function() {
-						if (contact) {
-							contact = false;
-							soundQueue.add("failed");
-						}
-
 						$("#builds ul").html("<li class=\"red\">Error contacting server</li>");
 						$('body').attr("class", "error");
 					});
-					soundQueue.play();
                 }, 5000);
             }); 	
 
 			function transitionFor(currentStatus, lastStatus) {
 				if (currentStatus=="blue" && lastStatus.color=="blue_anime")
-					soundQueue.add("successful");
+					return "successful";
 				if (currentStatus=="blue" && lastStatus.color=="red_anime")
-					soundQueue.add("fixed");
+					return "fixed";
 				if (currentStatus=="red" && lastStatus.color=="blue_anime")
-					soundQueue.add("failed");
+					return "failed";
 				if (currentStatus=="red" && lastStatus.color=="red_anime")
-					soundQueue.add("repeatedlyFailing");
+					return "repeatedlyFailing";
 				if (currentStatus.match(/_anime$/) && !lastStatus.color.match(/_anime$/))
-					soundQueue.add("started");								
+					return "started";
+				return null;
 			}
             
             function overallStatus(jobs) {
