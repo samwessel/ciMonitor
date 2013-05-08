@@ -12,11 +12,13 @@
 		<audio id="started" src="sound/started.mp3"></audio>
 		<audio id="repeatedlyFailing" src="sound/repeatedlyFailing.mp3"></audio>
 		
-        <div id="builds">
-            <ul>
-                <li>Contacting build server...</li>
-            </ul>
-        </div>
+		<div id="wrapper">
+			<div id="builds">
+				<ul>
+					<li>Contacting build server...</li>
+				</ul>
+			</div>
+		</div>
 
         <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script> 
         <script type="text/javascript">
@@ -25,7 +27,7 @@
                 var lastData = null;
                 setInterval(function () {
                     $.ajax({
-						url: "http://buildslave01/view/All/api/json?format=json&jsonp=?",
+						url: "http://build.esendex.com/view/All/api/json?format=json&jsonp=?",
                         dataType: "jsonp",
 						timeout: 5000
 					}).done(function (data) {
@@ -45,7 +47,7 @@
 						});
 						$('body').attr("class", overallStatus(data.jobs));
 						lastData = data;
-					}).fail(function() {
+					}).fail(function(jqXHR, textStatus) {
 						$("#builds ul").html("<li class=\"red\">Error contacting server</li>");
 						$('body').attr("class", "error");
 					});
