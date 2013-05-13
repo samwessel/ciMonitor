@@ -58,6 +58,7 @@ li {
     background-color: Gray;
 }
 
+.aborted_anime,
 .blue_anime,
 .red_anime {
     background-color: Yellow;
