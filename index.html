@@ -6,6 +6,7 @@
     </head>
 
     <body>
+		<audio id="new" src="sound/new.mp3"></audio>
 		<audio id="successful" src="sound/successful.mp3"></audio>
 		<audio id="failed" src="sound/failed.mp3"></audio>
 		<audio id="fixed" src="sound/fixed.mp3"></audio>
@@ -57,6 +58,8 @@
             }); 	
 
 			function transitionFor(currentStatus, lastStatus) {
+				if (lastStatus===undefined)
+					return "new";
 				if (currentStatus=="blue" && lastStatus.color=="blue_anime")
 					return "successful";
 				if (currentStatus=="blue" && lastStatus.color=="red_anime")
@@ -76,14 +79,14 @@
                     if (!statuses[this.color])
                         statuses[this.color] = 0;
                     statuses[this.color]++;
-					
-					if ($("#debug")) {
-						$("#debug").html("");
-						for(var status in statuses) {
-							$("#debug").append(status + " : " + statuses[status]);
-						}
-					}
                 });
+
+				if ($("#debug")) {
+					$("#debug").html("");
+					for(var status in statuses) {
+						$("#debug").append(status + " : " + statuses[status]);
+					}
+				}		
 				
                 if (jobs.length > 0 && jobs.length - statuses["disabled"] == statuses["blue"] + statuses["blue_anime"])
                     return "blue";
