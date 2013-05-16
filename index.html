@@ -12,6 +12,7 @@
 		<audio id="fixed" src="sound/fixed.mp3"></audio>
 		<audio id="started" src="sound/started.mp3"></audio>
 		<audio id="repeatedlyFailing" src="sound/repeatedlyFailing.mp3"></audio>
+		<audio id="noChange"></audio>
 		
 		<div id="wrapper">
 			<div id="builds">
@@ -70,7 +71,7 @@
 					return "repeatedlyFailing";
 				if (currentStatus.match(/_anime$/) && !lastStatus.color.match(/_anime$/))
 					return "started";
-				return null;
+				return "noChange";
 			}
             
             function overallStatus(jobs) {
