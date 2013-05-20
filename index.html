@@ -37,6 +37,8 @@
 					}).done(function (data) {
 						$("#builds ul").html("");
 						var transitions = [];
+						var statuses = { "blue":0, "blue_anime":0, "red":0, "red_anime":0, "aborted":0, "disabled":0, "unknown":0};
+
 						$(data.jobs).each(function (index) {
 							$("#builds ul").append("<li class=\"" + this.color + "\">" + this.name + "</li>");
 							
@@ -45,11 +47,17 @@
 								if (transition)
 									transitions.push(transition);
 							}
+							
+							if (!statuses[this.color])
+								statuses[this.color] = 0;
+							statuses[this.color]++;
 						});
+						
 						$(transitions).each(function() {
 							$("audio#"+this)[0].play();
 						});
-						$('body').attr("class", overallStatus(data.jobs));
+												
+						$('body').attr("class", overallStatus(data.jobs, statuses));
 						lastData = data;
 					}).fail(function(jqXHR, textStatus) {
 						$("#builds ul").html("<li class=\"red\">Error contacting server</li>");
@@ -74,24 +82,10 @@
 				return "noChange";
 			}
             
-            function overallStatus(jobs) {
-                var statuses = { "blue":0, "blue_anime":0, "red":0, "red_anime":0, "aborted":0, "disabled":0, "unknown":0};
-                $(jobs).each(function () {
-                    if (!statuses[this.color])
-                        statuses[this.color] = 0;
-                    statuses[this.color]++;
-                });
-
-				if ($("#debug")) {
-					$("#debug").html("");
-					for(var status in statuses) {
-						$("#debug").append(status + " : " + statuses[status]);
-					}
-				}		
-				
+            function overallStatus(jobs, statuses) {				
                 if (jobs.length > 0 && jobs.length - statuses["disabled"] == statuses["blue"] + statuses["blue_anime"])
                     return "blue";
-                if (statuses["red"] > 0 || statuses["red_anime"] > 0 || statuses["aborted"] > 0)
+                if (statuses["red"] > 0 || statuses["red_anime"] > 0 || statuses["aborted"] > 0 || statuses["aborted_anime"] > 0)
                     return "red";
                 return "unknown";
             }
