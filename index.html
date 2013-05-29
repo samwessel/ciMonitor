@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>ciMonitor</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+		<audio id="new"><source src="sound/new.mp3"></audio>
+		<audio id="successful"><source src="sound/successful.mp3"></audio>
+		<audio id="failed"><source src="sound/failed.mp3"></audio>
+		<audio id="fixed"><source src="sound/fixed.mp3"></audio>
+		<audio id="started"><source src="sound/started.mp3"></audio>
+		<audio id="repeatedlyFailing"><source src="sound/repeatedlyFailing.mp3" type="audio/mpeg"></audio>
+		<audio id="noChange"><source src="sound/noChange.mp3" type="audio/mpeg"></audio>
+		
+		<div id="wrapper">
+			<div id="builds">
+				<ul>
+					<li>Contacting build server...</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div id="debug" style="display:none"></div>
+
+        <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script> 
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                var lastData = null;
+                setInterval(function () {
+                    $.ajax({
+						url: "http://build.esendex.com/view/All/api/json?format=json&jsonp=?",
+                        dataType: "jsonp",
+						timeout: 5000
+					}).done(function (data) {
+						$("#builds ul").html("");
+						var transitions = [];
+						var statuses = { "blue":0, "blue_anime":0, "red":0, "red_anime":0, "aborted":0, "disabled":0, "unknown":0};
+
+						$(data.jobs).each(function (index) {
+							$("#builds ul").append("<li class=\"" + this.color + "\">" + this.name + "</li>");
+							
+							if (lastData) {
+								var transition = transitionFor(this.color, lastData.jobs[index]);
+								if (transition)
+									transitions.push(transition);
+							}
+							
+							if (!statuses[this.color])
+								statuses[this.color] = 0;
+							statuses[this.color]++;
+						});
+						
+						$(transitions).each(function() {
+							$("audio#"+this)[0].play();
+						});
+												
+						$('body').attr("class", overallStatus(data.jobs, statuses));
+						lastData = data;
+					}).fail(function(jqXHR, textStatus) {
+						$("#builds ul").html("<li class=\"red\">Error contacting server</li>");
+						$('body').attr("class", "error");
+					});
+                }, 5000);
+            }); 	
+
+			function transitionFor(currentStatus, lastStatus) {
+				if (lastStatus===undefined)
+					return "new";
+				if (currentStatus=="blue" && lastStatus.color=="blue_anime")
+					return "successful";
+				if (currentStatus=="blue" && lastStatus.color=="red_anime")
+					return "fixed";
+				if (currentStatus=="red" && lastStatus.color=="blue_anime")
+					return "failed";
+				if (currentStatus=="red" && lastStatus.color=="red_anime")
+					return "repeatedlyFailing";
+				if (currentStatus.match(/_anime$/) && !lastStatus.color.match(/_anime$/))
+					return "started";
+				return "noChange";
+			}
+            
+            function overallStatus(jobs, statuses) {				
+                if (jobs.length > 0 && jobs.length - statuses["disabled"] == statuses["blue"] + statuses["blue_anime"])
+                    return "blue";
+                if (statuses["red"] > 0 || statuses["red_anime"] > 0 || statuses["aborted"] > 0 || statuses["aborted_anime"] > 0)
+                    return "red";
+                return "unknown";
+            }
+        </script>        
+    </body>
+</html>
+

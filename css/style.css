@@ -1,0 +1,74 @@
+﻿body, html {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Sans-Serif;
+	height: 100%;
+}
+
+#wrapper { 
+	width: 100%; 
+	height: 100%; 
+	overflow: visible;
+} 
+
+#wrapper[id] {
+	display: table; 
+	position: static;
+}
+
+#builds[id] {
+	display: table-cell; 
+	vertical-align: middle; 
+	max-width: 800px; /* hack to force long text to wrap */
+	position: static;
+}
+
+ul {
+    font-size: 60pt;
+    padding:0;
+    margin: 0 auto;
+    list-style: none;
+}
+
+li {
+    padding:1px 5px;
+    margin: 5px 0;
+    list-style: none;
+	text-align:center;
+	word-wrap: break-word;
+}
+
+
+#builds .blue,
+#builds .disabled {
+    display: none;
+}
+
+.blue {
+    background-color: Green;
+}
+
+.red,
+.aborted {
+    background-color: Red;
+}
+
+.unknown,
+.disabled {
+    background-color: Gray;
+}
+
+.aborted_anime,
+.blue_anime,
+.red_anime {
+    background-color: Yellow;
+}
+
+.blue_anime {
+	color: Green;
+}
+
+body.error { 
+	background: black url("../img/DoubleFacePalm.jpg") no-repeat fixed center;
+	background-size: 80%;
+}
